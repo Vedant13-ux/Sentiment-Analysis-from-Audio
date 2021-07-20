@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/input.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/button.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/form.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/loader.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/components/dimmer.min.css">
+        <style>
+          .App {
+            text-align: center;
+          }
+          
+
+          body{
+            background: #282c34 !important;
+            overflow-x: hidden;
+          
+          }
+          .App-header {
+            /* background: #282c34 !important; */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: calc(10px + 2vmin);
+            color: white;
+          }
+          
+          .App-link {
+            color: #61dafb;
+          }
+         
+          .button{
+            display: none;
+          }
+          .audioCnt{
+            display: none;
+          }
+          #loader{
+              display: none;
+              color: white;
+              margin: 0 auto;
+          }
+
+       
+
+
+        </style>
+    </head>
+    <body>
+        <div class="App">
+            <header class="App-header">
+                <h1>Sentiment Analysis from Audio</h1>
+                <p
+                    class="App-link">
+                    Upload an Audio
+                </p>
+                <form class="ui form" enctype="multipart/form-data"  action="/upload" method="POST" style="width: 800px;" >
+                    <div class="field">
+                        <div class="ui input">
+                            <input name="file"  required type="file" id="file" />
+                        </div>
+                    </div>
+                    <button class="ui button">Submit</button>
+                </form>
+
+                <center class="audioCnt">
+                    <button class="ui button audio blue" style="margin-top: 10px;">
+                        Play Audio ▶️
+                    </button>
+                </center>
+    
+            </header>
+        </div>
+        <div class="ui active dimmer" id="loader">
+            <div class="ui large text loader" >Analyzing your Audio...</div>
+        </div>
+
+        <script>
+            window.AudioContext = window.AudioContext || window.webkitAudioContext;
+            var context = new window.AudioContext();
+            var source;
+            function playSound(arraybuffer) {
+                context.decodeAudioData(arraybuffer, function (buf) {
+                    source = context.createBufferSource();
+                    source.connect(context.destination);
+                    source.buffer = buf;
+                    source.start(0);
+                });
+            }
+
+            function handleFileSelect(evt) {
+                source=null
+                var files = evt.target.files; // FileList object
+                document.querySelector('.audioCnt').style.display='block'
+                document.querySelector('.audio').removeEventListener('click', ()=>{})
+                document.querySelector('.audio').addEventListener('click',(e)=>{
+                    if(e.target.classList.contains('audio')){
+                        e.target.innerHTML='Pause Audio ⏸'
+                        e.target.classList.remove('audio')
+                        playFile(files[0])
+                    }else{
+                        e.target.classList.add('audio')
+                        e.target.innerHTML='Play Audio ▶️'
+                        source.stop()
+                    }
+                })
+            }
+
+            function playFile(file) {
+                var freader = new FileReader();
+
+                freader.onload = function (e) {
+                    console.log(e.target.result);
+                    playSound(e.target.result);
+                };
+                freader.readAsArrayBuffer(file);
+            }
+            
+            document.getElementById('file').addEventListener('change', handleFileSelect);
+
+            window.addEventListener("beforeunload", function(event) {
+                console.log('un loading')
+                document.querySelector('#loader').style.display='block'
+            });
+        </script>
+    </body>
+</html>

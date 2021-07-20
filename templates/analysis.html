@@ -1,0 +1,82 @@
+<html>
+
+<head>
+  <link href="https://unpkg.com/video.js/dist/video-js.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <title>Video.js Starter Template</title>
+  <style>
+      @import url('https://fonts.googleapis.com/css?family=Karla');
+      body{
+        font-family: 'Karla', sans-serif;
+        background: #BBD2C5;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #536976, #BBD2C5);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #536976, #BBD2C5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+      }
+      .card{
+          background-color: aliceblue;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          min-height: 100px;
+          min-width: 200px;
+          height: auto;
+          width: auto;
+          padding: 10px;
+          padding-top: 0px;
+          word-wrap: break-word;
+      }
+      .score{
+          background-color: aliceblue;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          min-height: 100px;
+          min-width: 300px;
+          height: auto;
+          width: auto;
+          margin-left: 20px;
+          padding: 10px;
+          text-align: center;
+      }
+      img{
+        width: 150px;
+        height: 100px ;
+        margin: 4px auto;
+        border-radius: 5px;
+        left:'50%';
+        transform: translateX(-50%);
+      }
+  </style>
+</head>
+
+<body>
+  <center><h1 style="color: aliceblue;">Results</h1></center>
+  <div style="display: flex; align-items: center; margin: 0 auto; max-width: 1000px; justify-content: center;">
+    <div class="card">
+        <center><h2>Transcript</h2></center>
+        <br>
+            {{transcript}}
+        <br>
+    </div>
+    <div class="score">
+        <div style="text-align: center;">
+            <center><h2>Score</h2></center>
+            <div>Label - {{label}}</div>
+            <div>Score - {{score}}</div>
+            {% if label=="NEGATIVE" %}
+                <center><img src="https://www.itweb.co.za/static/pictures/2018/10/resized/-fs-dislike-emoji-2018.xl.jpg" /> </center>
+            {% else %}
+                <center><img src="https://i.pinimg.com/originals/95/7e/80/957e806e153ab4f3cdf21b7c366bfdfb.png" /></center>    
+            {% endif %}
+            
+        </div>
+        <center>
+            <audio controls >
+                <source src="{{ fileURL }}" type="audio/ogg">
+              Your browser does not support the audio element.
+            </audio>
+        </center>
+    </div>
+   
+  </div>
+  
+  <script src="https://unpkg.com/video.js/dist/video.js"></script>
+</body>
+
+</html>
